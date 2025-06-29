@@ -1,1 +1,3 @@
 kivy
+pytest
+flake8
