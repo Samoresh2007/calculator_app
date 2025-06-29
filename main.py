@@ -1,56 +1,24 @@
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
 
 class Calculator(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.orientation = 'vertical'
-        
-        self.result = TextInput(
-            readonly=True,
-            halign="right",
-            font_size=32
-        )
-        self.add_widget(self.result)
-        
-        buttons = [
-            ['7', '8', '9', '/'],
-            ['4', '5', '6', '*'],
-            ['1', '2', '3', '-'],
-            ['.', '0', 'C', '+']
-        ]
-        
-        for row in buttons:
-            h_layout = BoxLayout()
-            for label in row:
-                button = Button(
-                    text=label,
-                    pos_hint={'center_x': 0.5, 'center_y': 0.5}
-                )
-                button.bind(on_press=self.on_button_press)
-                h_layout.add_widget(button)
-            self.add_widget(h_layout)
-        
-        equals_button = Button(
-            text='=',
-            size_hint=(1, 0.2)
-        )
-        equals_button.bind(on_press=self.on_solution)
-        self.add_widget(equals_button)
-    
-    def on_button_press(self, instance):
-        if instance.text == 'C':
-            self.result.text = ''
-        else:
-            self.result.text += instance.text
-    
-    def on_solution(self, instance):
+    def button_pressed(self, button_text):
+        # Append button text to result display
+        current = self.ids.result.text
+        self.ids.result.text = current + button_text
+
+    def clear_result(self):
+        # Clear the result display
+        self.ids.result.text = ''
+
+    def calculate_result(self):
+        # Try to evaluate the expression
         try:
-            self.result.text = str(eval(self.result.text))
+            expression = self.ids.result.text
+            result = str(eval(expression))
+            self.ids.result.text = result
         except:
-            self.result.text = 'Error'
+            self.ids.result.text = 'Error'
 
 class CalculatorApp(App):
     def build(self):
