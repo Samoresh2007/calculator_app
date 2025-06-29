@@ -1,5 +1,5 @@
 def evaluate_expression(expression):
     try:
         return str(eval(expression))
-    except:
+    except Exception:
         return "Error"
